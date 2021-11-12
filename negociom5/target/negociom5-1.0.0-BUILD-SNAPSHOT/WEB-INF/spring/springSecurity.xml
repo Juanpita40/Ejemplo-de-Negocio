@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bean:beans xmlns:bean="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+xmlns="http://www.springframework.org/schema/security"
+xsi:schemaLocation="http://www.springframework.org/schema/beans 
+http://www.springframework.org/schema/beans/spring-beans.xsd 
+http://www.springframework.org/schema/security 
+http://www.springframework.org/schema/security/spring-security.xsd">
+
+	<http auto-config="true">
+		<intercept-url pattern="/" access="permitAll" />
+		<intercept-url pattern="/crear" access="hasRole('ADMIN')" />
+		<intercept-url pattern="/eliminarventa/**" access="hasRole('USUARIO')" />
+		<intercept-url pattern="/editarventa/**" access="hasRole('USUARIO')" />
+
+		<form-login 
+		login-page="/login"
+		authentication-failure-url="/error"
+		       username-parameter="username"
+		       password-parameter="password"
+		/>
+		<csrf disabled="true"/>
+		<logout logout-success-url="/login" />		
+	</http>
+
+	<authentication-manager>
+		<authentication-provider>
+		<user-service>
+			<user name="manuel" password="{noop}1234" authorities="ROLE_ADMIN" />
+			<user name="javier" password="{noop}5678" authorities="ROLE_USUARIO" />
+			<user name="diego" password="{noop}5678" authorities="ROLE_USUARIO, ROLE_ADMIN" />
+		</user-service>
+		</authentication-provider>
+	</authentication-manager>
+</bean:beans>
